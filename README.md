@@ -1,2 +1,2 @@
 # dotfiles
-Dotfiles
+making my life easier
