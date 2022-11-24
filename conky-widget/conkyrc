@@ -1,81 +1,99 @@
+--[[
+# Minimalis Conky 1.3
+# Author : archit3x
+# Release date : 4 December 2020
+# Tested on : Archlinux ARM - XFCE Desktop
+# Email : archit3x@archlinux.us
+# Feel free to modity this script ;)
+]]
+
 conky.config = {
-	
-	update_interval = 1,
-	cpu_avg_samples = 2,
-	net_avg_samples = 2,
-	out_to_console = false,
-	override_utf8_locale = true,
-	double_buffer = true,
-	no_buffers = true,
-	text_buffer_size = 32768,
-	imlib_cache_size = 0,
-	own_window = true,
-	own_window_type = 'normal',
-	own_window_argb_visual = true,
-	own_window_argb_value = 50,
-	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
-	border_inner_margin = 5,
-	border_outer_margin = 0,
-	xinerama_head = 1,
-	alignment = 'bottom_right',
-	gap_x = 0,
-	gap_y = 33,
-	draw_shades = false,
-	draw_outline = false,
-	draw_borders = false,
-	draw_graph_borders = false,
-	use_xft = true,
-	font = 'Ubuntu Mono:size=12',
-	xftalpha = 0.8,
-	uppercase = false,
-	default_color = 'white',
-	own_window_colour = '#000000',
-	minimum_width = 300, minimum_height = 0,
-	alignment = 'top_right',
+    alignment = 'top_right',
+    background = true,
+    border_width = 1,
+    cpu_avg_samples = 2,
+    default_color = 'gray',
+    default_outline_color = 'white',
+    default_shade_color = 'white',
+    color1 = '#1793d1',
+    double_buffer = true,
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    extra_newline = false,
+    font = 'Roboto Mono:size=7',
+    gap_x = 30,
+    gap_y = 30,
+    minimum_height = 250,
+    minimum_width = 220,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = false,
+    out_to_ncurses = false,
+    out_to_stderr = false,
+    out_to_x = true,
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_transparent = true,
+    own_window_argb_visual = true,
+    own_window_type = 'desktop',
+    own_window_hints ='undecorated,sticky,skip_taskbar,skip_pager,below',
+    show_graph_range = false,
+    show_graph_scale = false,
+    stippled_borders = 0,
+    update_interval = 1.0,
+    uppercase = false,
+    use_spacer = 'none',
+    use_xft = true,
+}
 
-};
 conky.text = [[
-${time %H:%M:%S}${alignr}${time %d-%m-%y}
-${voffset -16}${font sans-serif:bold:size=18}${alignc}${time %H:%M}${font}
-${voffset 4}${alignc}${time %A %B %d, %Y}
-${font}${voffset -4}
-${font sans-serif:bold:size=10}SYSTEM ${hr 2}
-${font sans-serif:normal:size=8}$sysname $kernel $alignr $machine
-Host:$alignr$nodename
-Uptime:$alignr$uptime
-File System: $alignr${fs_type}
-Processes: $alignr ${execi 1000 ps aux | wc -l}
+${color1}${font ConkySymbols:size=20}t${font} ${voffset -10}GNU/Linux» $hr ${color}
+${color1}${goto 35}OS     : ${color}${execi 86400 cat `ls -atr /etc/*-release | tail -2` | grep "PRETTY_NAME" | cut -d= -f2 |  sed 's/"//g'}
+${color1}${goto 35}Kernel : ${color}$kernel on $machine
 
-${font sans-serif:bold:size=10}CPU ${hr 2}
-${font sans-serif:normal:size=8}${execi 1000 grep model /proc/cpuinfo | cut -d : -f2 | tail -1 | sed 's/\s//'}
-${font sans-serif:normal:size=8}${cpugraph cpu1}
-CPU: ${cpu cpu1}% ${cpubar cpu1}
 
-${font sans-serif:bold:size=10}MEMORY ${hr 2}
-${font sans-serif:normal:size=8}RAM $alignc $mem / $memmax $alignr $memperc%
-$membar
-SWAP $alignc ${swap} / ${swapmax} $alignr ${swapperc}%
-${swapbar}
+${color1}${font ConkySymbols:size=16}f${font} ${voffset -10} System» $hr${color}
+${color1}${goto 35}Core 1 : ${color}${freq_g 1}GHz ${alignr}${cpu cpu0}% ${cpubar cpu0 4,100}
+${color1}${goto 35}Core 2 : ${color}${freq_g 2}GHz ${alignr}${cpu cpu1}% ${cpubar cpu1 4,100}
+${color1}${goto 35}Core 3 : ${color}${freq_g 3}GHz ${alignr}${cpu cpu2}% ${cpubar cpu2 4,100}
+${color1}${goto 35}Core 4 : ${color}${freq_g 4}GHz ${alignr}${cpu cpu3}% ${cpubar cpu3 4,100}
 
-${font sans-serif:bold:size=10}DISK USAGE ${hr 2}
-${font sans-serif:normal:size=8}/ $alignc ${fs_used /} / ${fs_size /} $alignr ${fs_used_perc /}%
-${fs_bar /}
+${color1}${goto 35}Uptime : ${color}$uptime_short ${alignr}${color1}Load  : ${color}${loadavg}
 
-${font Ubuntu:bold:size=10}NETWORK ${hr 2}
-${font sans-serif:normal:size=8}Local IPs:${alignr}External IP:
-${execi 1000 ip a | grep inet | grep -vw lo | grep -v inet6 | cut -d \/ -f1 | sed 's/[^0-9\.]*//g'}  ${alignr}${execi 1000  wget -q -O- http://ipecho.net/plain; echo}
-${font sans-serif:normal:size=8}Down: ${downspeed enp0s3}  ${alignr}Up: ${upspeed enp0s3} 
-${color lightgray}${downspeedgraph enp0s3 80,130 } ${alignr}${upspeedgraph enp0s3 80,130 }$color
-${font sans-serif:bold:size=10}TOP PROCESSES ${hr 2}
-${font sans-serif:normal:size=8}Name $alignr PID   CPU%   MEM%${font sans-serif:normal:size=8}
-${top name 1} $alignr ${top pid 1} ${top cpu 1}% ${top mem 1}%
-${top name 2} $alignr ${top pid 2} ${top cpu 2}% ${top mem 2}%
-${top name 3} $alignr ${top pid 3} ${top cpu 3}% ${top mem 3}%
-${top name 4} $alignr ${top pid 4} ${top cpu 4}% ${top mem 4}%
-${top name 5} $alignr ${top pid 5} ${top cpu 5}% ${top mem 5}%
-${top name 6} $alignr ${top pid 6} ${top cpu 6}% ${top mem 6}%
-${top name 7} $alignr ${top pid 7} ${top cpu 7}% ${top mem 7}%
-${top name 8} $alignr ${top pid 8} ${top cpu 8}% ${top mem 8}%
-${top name 9} $alignr ${top pid 9} ${top cpu 9}% ${top mem 9}%
-${top name 10} $alignr ${top pid 10} ${top cpu 10}% ${top mem 10}%
-]];
+
+${color1}${font ConkySymbols:size=16}h${font} ${voffset -10} Temperature» $hr${color}
+${color1}${goto 35}CPU : ${color}${exec sensors | grep 'temp1' | awk 'NR==1{print $2}'} ${alignr}${color1}GPU : ${color}${exec sensors | grep 'temp1' | awk 'NR==2{print $2}'}
+
+
+${color1}${font ConkySymbols:size=16}J${font} ${voffset -10}Memory» $hr${color}
+${color1}${goto 35}RAM : ${color}$mem/$memmax ${alignr}$memperc% ${membar 4,100}
+${color1}${goto 35}SWAP: ${color}$swap/$swapmax $alignr}$swapperc% ${swapbar 4,100}
+
+
+${color1}${font ConkySymbols:size=16}n${font} ${voffset -10} Processes» $hr${color}
+
+${color1}${goto 35}CPU usage ${alignr}Memory Usage${color}
+${color1}${goto 35}${stippled_hr}${color}
+${goto 35}${top name 1} ${color}${top cpu 1}% ${alignr}${top_mem name 1}${top_mem mem_res 1}
+${goto 35}${top name 2} ${color}${top cpu 2}% ${alignr}${top_mem name 2}${top_mem mem_res 2}
+${goto 35}${top name 3} ${color}${top cpu 3}% ${alignr}${top_mem name 3}${top_mem mem_res 3}
+${goto 35}${top name 4} ${color}${top cpu 4}% ${alignr}${top_mem name 4}${top_mem mem_res 4}
+${goto 35}${top name 5} ${color}${top cpu 5}% ${alignr}${top_mem name 5}${top_mem mem_res 5}
+
+${color1}${goto 35}Processes: ${color}$processes ${color1}Running: ${color}$running_processes
+
+
+${color1}${font ConkySymbols:size=16}k${font} ${voffset -10} Storage» $hr${color}
+${color1}${goto 35}ROOT : ${color}${fs_used /}/${fs_size /} ${alignr}${fs_used_perc /}% ${fs_bar 4,100 /}
+${goto 35}
+
+
+${color1}${font ConkySymbols:size=16}b${font} ${voffset -10} Wireless» $hr${color}
+${color1}${goto 35}SSID          : ${color}${wireless_essid wlan0} ${color1}${alignr}Signal: ${color}${wireless_link_qual_perc wlan0}% ${wireless_link_bar 4,100 wlan0}
+${color1}${goto 35}Bitrate       : ${color}${wireless_bitrate wlan0}
+${color1}${goto 35}Total Down/Up : ${color}${totaldown wlan0}/${totalup wlan0} 
+${color1}${goto 35}Speed Down/Up : ${color}${downspeed wlan0}/${upspeed wlan0}
+
+]]
