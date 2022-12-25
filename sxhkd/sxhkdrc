@@ -2,3 +2,7 @@
 # firefox
 super + shift + f
   firefox
+  
+# dolphin
+super + shift + n
+  dolphin
