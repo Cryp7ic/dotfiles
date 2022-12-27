@@ -4,6 +4,6 @@ nm-applet &
 xfce4-power-manager &
 sxhkd -c ~/.config/sxhkdrc &
 ~/.scripts/time.sh &
-picom &
+picom -b &
 ~/.fehbg &
 dwm
